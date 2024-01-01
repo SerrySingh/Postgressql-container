@@ -1,0 +1,4 @@
+-- init.sql
+CREATE DATABASE db;
+CREATE USER postgres WITH PASSWORD 'postgres';
+GRANT ALL PRIVILEGES ON DATABASE db TO postgres;
