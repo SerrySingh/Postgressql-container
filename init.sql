@@ -1,13 +1,28 @@
 -- init.sql
+-- Connect to the default "postgres" database
+\c postgres
 
--- Create a database
-CREATE DATABASE db;
+-- Check if the database "db" exists, and create it if not
+DO $$ 
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'db') THEN
+    CREATE DATABASE db;
+  END IF;
+END $$;
 
--- Create a user
-CREATE USER postgres WITH PASSWORD 'postgres';
+-- Connect to the "db" database
+\c db;
 
--- Grant all privileges on the database to the user
+-- Check if the user "postgres" exists, and create it if not
+DO $$ 
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_user WHERE usename = 'postgres') THEN
+    CREATE USER postgres WITH PASSWORD 'postgres';
+  ELSE
+    -- If the user exists, change the password
+    ALTER USER postgres WITH PASSWORD 'postgres';
+  END IF;
+END $$;
+
+-- Grant all privileges to the "postgres" user on the "db" database
 GRANT ALL PRIVILEGES ON DATABASE db TO postgres;
-
--- Change the password for the user
-ALTER USER postgres WITH PASSWORD 'new_password';
